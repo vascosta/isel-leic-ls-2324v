@@ -1,0 +1,718 @@
+openapi: '3.0.2'
+info:
+  title: LS-API
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /home/{token}:
+    get:
+      summary: Gets player name and ID
+      description: Endpoint to get player name and ID
+      parameters:
+        - name: token
+          in: path
+          description: ID of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayersInfo'
+        '404':
+          description: Player not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /login:
+    patch:
+      summary: Logs in
+      description: Endpoint to login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerLogin'
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerAuth'
+        '400':
+          description: Invalid player credentials
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Player not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /logout:
+    patch:
+      summary: Logs out
+      description: Endpoint to logout
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Logged out successfully
+        '404':
+          description: Player not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /player:
+    post:
+      summary: Creates a player
+      description: Endpoint to create a player
+      responses:
+        '201':
+          description: Successfully created a player
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerAuth'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '409':
+          description: Player already exists
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /player/{id}:
+    get:
+      summary: Gets a player by its ID
+      description: Endpoint to get a player by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID of the player
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerInfo'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Player was not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /players/search:
+    get:
+      summary: Gets a player by its email
+      description: Endpoint to get a player by its email
+      parameters:
+        - name: name
+          in: query
+          description: Email of the player
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Paging limit
+          required: false
+          schema:
+            type: integer
+        - name: skip
+          in: query
+          description: Paging skip
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player info
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/PlayerInfo'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+  /game:
+    post:
+      summary: Creates a game
+      description: Endpoint to create a game
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Successfully created a game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameId'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Game already exists
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /game/{id}:
+    get:
+      summary: Gets a game by an ID
+      description: Endpoint to get a game by an ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the game
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Game found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '404':
+          description: Game was not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /games:
+    get:
+      summary: Gets a list of games by genres and developers
+      description: Endpoint to get a list of games by genres and developers
+      parameters:
+        - name: genres
+          in: query
+          description: Genres to search for
+          required: false
+          schema:
+            type: string
+        - name: developer
+          in: query
+          description: Developer to search for
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Game name to search for
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameList'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+  /session:
+    post:
+      summary: Create a new session
+      description: Endpoint to create a new Session
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Session to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionCreate'
+      responses:
+        '201':
+          description: Successfully created a session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionId'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /session/{id}:
+    patch:
+      summary: Edits a session's info
+      description: Endpoint to edit a session
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the session
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: New session info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionUpdate'
+      responses:
+        '200':
+          description: Updated session successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Player not the session host
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Deletes a session
+      description: Endpoint to delete a session
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the session
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successfully deleted a session
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Player not the host
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /session/{id}/players:
+    patch:
+      summary: Adds a player to a session
+      description: Endpoint to add a player to a session
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Player to add
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully added a player to a session
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Session is full or Session has Player already
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /session/{id}/player:
+    patch:
+      summary: Removes a player from a session
+      description: Endpoint to remove a player from a session
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: Session ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRemovePlayer'
+      responses:
+        '200':
+          description: Successfully removed the player
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '401':
+          description: Unauthorized
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Session host cant be removed or Player is not in session
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /session/info/{id}:
+    get:
+      summary: Gets a session's info
+      description: Endpoint to get a session's info
+      parameters:
+        - name: id
+          in: path
+          description: ID of the session
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Successfully got a session's info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+        '404':
+          description: Session not found
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /session/search:
+    get:
+      summary: Gets a list of sessions
+      description: Endpoint to get a list of sessions
+      parameters:
+        - name: gameId
+          in: query
+          description: ID of the gameId
+          required: false
+          schema:
+            type: number
+            minimum: 1
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: 'yyyy-MM-ddTHH:mm:ss-'
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [open, close]
+        - name: pid
+          in: query
+          required: false
+          schema:
+            type: number
+            minimum: 1
+      responses:
+        '200':
+          description: Successfully got a list of sessions of a given game
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+        '400':
+          description: A parameter was not correct
+          content:
+            application/error-json:
+              schema:
+                $ref: '#/components/schemas/InvalidParameterError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized
+    InvalidParameterError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: The provided parameter is invalid
+      required:
+        - error
+    PlayerLogin:
+      type: object
+      description: Object that represents the login credentials
+      properties:
+        name:
+          type: string
+          description: Players' username
+        password:
+          type: string
+          description: Players' password
+    Session:
+      type: object
+      description: Object that represents a Session
+      properties:
+        id:
+          type: number
+          description: Session's internal ID
+          minimum: 1
+        capacity:
+          type: number
+          description: Min session capacity
+          minimum: 1
+        date:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$'
+          description: Date of the session in the format "YYYY-MM-DD HH:MM"
+        game:
+          $ref: '#/components/schemas/Game'
+        players:
+          type: array
+          description: Array of players
+          items:
+            $ref: '#/components/schemas/PlayerHome'
+        hostId:
+          type: integer
+          description: ID of the Host
+    SessionCreate:
+      type: object
+      description: Object that represents the Session to create
+      properties:
+        capacity:
+          type: number
+          description: Maximum capacity of the session
+          minimum: 1
+        date:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$'
+          description: Date of the session in the format "YYYY-MM-DD HH:MM"
+        gameId:
+          type: number
+          description: Game ID that the Session mentions
+          minimum: 1
+    SessionUpdate:
+      type: object
+      description: Object that represents the new info
+      properties:
+        capacity:
+          type: number
+          description: Maximum capacity of the session
+        date:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$'
+          description: Date of the session in the format "YYYY-MM-DD HH:MM"
+        gameId:
+          type: number
+          description: Game ID that the Session mentions
+    SessionRemovePlayer:
+      type: object
+      description: Object that contains the player to remove
+      properties:
+        playerId:
+          type: number
+          description: ID of player to remove
+    SessionId:
+      type: object
+      description: Object that returns the created Session's ID
+      properties:
+        sessionId:
+          type: number
+          description: Session's ID
+          minimum: 1
+    SessionPlayer:
+      type: object
+      properties:
+        sessionId:
+          type: number
+          description: Session ID to add the player to
+          minimum: 1
+        playerId:
+          type: number
+          description: Player to add to the Session
+          minimum: 1
+    PlayerHome:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Player ID
+        name:
+          type: string
+          description: Player name
+    PlayerAuth:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token used to authenticate as this user
+        id:
+          type: number
+          description: ID attributed to this user
+    PlayerInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the user
+        name:
+          type: string
+          description: Name of the user
+        email:
+          type: string
+          description: Email of the user
+    PlayersInfo:
+      type: object
+      properties:
+        players:
+          type: array
+          description: Players
+          items:
+            $ref: '#/components/schemas/PlayerInfo'
+    GameId:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID of the game
+    Game:
+      type: object
+      properties:
+        id:
+          type: number
+          description: ID of the game
+        name:
+          type: string
+          description: Name of the game
+        developer:
+          type: string
+          description: Developer of the game
+        genres:
+          type: array
+          description: Genres of the game
+          items:
+            type: string
+    GameList:
+      type: object
+      properties:
+        games:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'

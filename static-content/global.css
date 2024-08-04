@@ -1,0 +1,283 @@
+:root {
+    --font-family: Quicksand;
+    --font-color: black;
+    --font-color-hover: grey;
+
+    --primary: bisque;
+    --secondary: blanchedalmond;
+    --accent: ghostwhite;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 100vh;
+    font-family: var(--font-family);
+}
+
+#homeContent {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+#playerHomeContent {
+    display: flex;
+    flex-direction: row;
+}
+
+#mainContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.link-primary, .link-secondary {
+    color: var(--font-color);
+}
+
+.link-primary:hover, .link-secondary:hover, li:hover  {
+    color: var(--font-color-hover)
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: var(--primary);
+    align-items: center;
+    border-radius: 1rem;
+    padding: .2rem;
+    margin: .5rem;
+}
+
+nav a {
+    background: transparent;
+    text-decoration: none;
+    color: var(--font-color);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+nav button {
+    margin: 0;
+    padding: 1rem;
+    height: fit-content;
+    align-self: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+nav button span {
+    height: 1.6rem;
+}
+
+nav a:hover, nav button:hover {
+    background: var(--secondary);
+}
+
+nav h3 {
+    align-content: center;
+    margin: 0 .5rem;
+}
+
+nav h3 > a {
+    border-radius: 0;
+    padding: 0;
+}
+
+nav h3 > a:hover {
+    background: transparent;
+}
+
+input, button, select {
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+    box-shadow: 0px 0px 2px 0px black;
+    border-radius: 1rem;
+    border: none;
+    padding: .4rem;
+    align-content: center;
+}
+
+span {
+    vertical-align: top;
+}
+
+a {
+    text-decoration: none;
+    color: var(--font-color);
+}
+
+a:hover {
+    color: var(--font-color-hover)
+}
+
+#paging {
+    align-self: center;
+}
+
+#paging > button {
+    margin: .5rem;
+}
+
+/*  Signup and Login forms */
+#signup, #login {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--primary);
+}
+
+/*  Profile */
+#playerSessions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#playerSessions > ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/*  Create session  */
+#createSessionForm {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--primary);
+}
+
+/*  Edit session    */
+#editSessionForm {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--primary);
+}
+
+/*  Search sessions */
+#searchSessionForm {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: var(--primary);
+}
+
+#searchSessionForm > input, #searchSessionForm > button, #searchSessionForm > select {
+    margin-right: .5rem;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+}
+
+#searchSessionForm > label {
+    margin-right: .5rem;
+}
+
+#searchSessionForm > button {
+    box-shadow: 0px 0px 2px 0px black;
+}
+
+#searchSession {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+#searchSession > span {
+    align-self: center;
+}
+
+table {
+    border-radius: 1rem;
+    margin: 1rem;
+    background: var(--accent);
+}
+
+tr > td {
+    text-align: center;
+}
+
+/*  Search games    */
+#gamesSearchForm {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    place-content: center;
+}
+
+#gamesNameDeveloper {
+
+}
+
+#gamesSearchResult {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gamesSearchResult > #games > ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/*  Create game */
+#createGame {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#gameCreateDetails {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#gameGenresList {
+    overflow-y: scroll;
+    height: 16rem;
+}
+
+#gameGenresList > div > label {
+    margin-left: 1rem;
+}
+
+/*  Game details    */
+#gameDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameDetails > div {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem;
+}
+
+/*  Game sessions   */
+#gameSessions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gameSessions > ul {
+    list-style-type: none;
+    padding-left: 0;
+}

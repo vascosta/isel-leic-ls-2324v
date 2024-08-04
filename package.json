@@ -1,0 +1,22 @@
+{
+  "name": "ls",
+  "version": "1.0.0",
+  "description": "## Group Members * Carolina Tavares - 49465 * Daniel Queijo - 49515 * Vasco Costa - 49412",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs",
+    "test": "static-content/tests"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^5.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.4.0"
+  }
+}
